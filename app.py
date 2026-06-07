@@ -11,7 +11,8 @@ from parser import extract_text, extract_skills, recommend_jobs, get_ai_feedback
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+import os
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///users.db')
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -142,7 +143,8 @@ def analyze():
                            missing_skills=missing_skills,
                            resume_score=resume_score)
 
+with app.app_context():
+    db.create_all()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
