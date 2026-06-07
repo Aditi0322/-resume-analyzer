@@ -4,3 +4,6 @@ pdfplumber
 scikit-learn
 google-generativeai
 python-dotenv
+flask-sqlalchemy
+flask-login
+flask-bcrypt
