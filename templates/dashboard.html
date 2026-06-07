@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; margin: 0; padding: 30px;">
+
+    <div style="max-width: 700px; margin: 0 auto; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <div>
+                <h1 style="color: #4a4a8a; margin: 0;">👋 Hi, {{ current_user.username }}!</h1>
+                <p style="color: #888; margin: 5px 0;">Your resume analysis history</p>
+            </div>
+            <div>
+                <a href="/" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 20px; border-radius: 20px; text-decoration: none; font-weight: 600; margin-right: 10px;">+ New Analysis</a>
+                <a href="/logout" style="background: #f0f0f0; color: #666; padding: 10px 20px; border-radius: 20px; text-decoration: none; font-weight: 600;">Logout</a>
+            </div>
+        </div>
+
+        {% if results %}
+            {% for result in results %}
+            <div style="background: #f8f7ff; border-radius: 15px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p style="margin: 0; font-weight: 600; color: #333;">📄 {{ result.filename }}</p>
+                        <p style="margin: 5px 0; color: #667eea; font-weight: 600;">🎯 {{ result.top_career }}</p>
+                        <p style="margin: 0; color: #888; font-size: 13px;">Skills: {{ result.skills }}</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 30px; font-weight: 700; color: #667eea;">{{ result.score }}</div>
+                        <div style="color: #888; font-size: 12px;">/ 100</div>
+                        <div style="color: #888; font-size: 11px;">{{ result.date.strftime('%d %b %Y') }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 40px; color: #888;">
+                <div style="font-size: 50px;">📭</div>
+                <p>No analyses yet! Upload your first resume.</p>
+                <a href="/" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 600;">Analyze Resume</a>
+            </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>
