@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center;">
+
+    <div style="background: white; padding: 40px; border-radius: 20px; width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="font-size: 40px;">📝</div>
+            <h1 style="color: #4a4a8a; font-size: 24px;">Create Account</h1>
+            <p style="color: #888; font-size: 14px;">Join Resume Analyzer</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+            <div style="background: #ffe0e0; color: red; padding: 10px; border-radius: 8px; margin-bottom: 15px;">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required
+                style="width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #eee; border-radius: 10px; font-family: Poppins; font-size: 14px; box-sizing: border-box;">
+            <input type="email" name="email" placeholder="Email" required
+                style="width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #eee; border-radius: 10px; font-family: Poppins; font-size: 14px; box-sizing: border-box;">
+            <input type="password" name="password" placeholder="Password" required
+                style="width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #eee; border-radius: 10px; font-family: Poppins; font-size: 14px; box-sizing: border-box;">
+            <button type="submit"
+                style="width: 100%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                Create Account
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 20px; color: #888; font-size: 14px;">
+            Already have an account? <a href="/login" style="color: #667eea; font-weight: 600;">Login</a>
+        </p>
+    </div>
+</body>
+</html>
