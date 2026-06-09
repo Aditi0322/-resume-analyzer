@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Resume Analyzer - CareerAI{% endblock %}
+
+{% block content %}
+<div class="page-wrapper fade-in">
+    <div class="page-header">
+        <h1>📄 Resume Analyzer</h1>
+        <p>Upload your resume and get AI-powered career match insights</p>
+    </div>
+
+    <!-- Upload Card -->
+    <div class="card" style="margin-bottom: 1.5rem;">
+        <form action="{{ url_for('analyze') }}" method="POST" enctype="multipart/form-data">
+            <div class="upload-zone" id="uploadZone">
+                <label for="fileInput">
+                    <div class="upload-icon">📄</div>
+                    <h3 id="fileLabel">Drop your resume here or click to browse</h3>
+                    <p>Supports PDF files up to 10MB</p>
+                    <br>
+                    <input type="file" id="fileInput" name="resume" accept=".pdf" required>
+                    <span class="btn btn-outline btn-sm" style="margin-top: 1rem; display: inline-flex;">
+                        Browse File
+                    </span>
+                </label>
+            </div>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" style="padding: 14px 40px; font-size: 1rem;">
+                    🔍 Analyze My Resume
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if recommendations %}
+    <div class="fade-in">
+
+        <!-- Score + Top Match Row -->
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+
+            <!-- Score -->
+            <div class="card" style="text-align: center;">
+                <p style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">Resume Score</p>
+                <div class="score-number">{{ resume_score }}</div>
+                <div class="score-label">out of 100</div>
+                <div class="progress-bar" style="margin-top: 1rem;">
+                    <div class="progress-fill" data-width="{{ resume_score }}" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- Top Match -->
+            <div class="top-match-card">
+                <div class="match-label">🏆 Best Career Match</div>
+                <div class="match-title">{{ recommendations[0][0] }}</div>
+                <div class="match-pct">{{ (recommendations[0][1] * 100)|int }}% Match Score</div>
+            </div>
+
+        </div>
+
+        <!-- Career Matches -->
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="section-title">📊 All Career Matches</div>
+            {% for job, score in recommendations %}
+                {% set pct = (score * 100)|int %}
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span>{{ job }}</span>
+                        <span style="color: var(--primary); font-weight: 700;">{{ pct }}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="{{ pct }}" style="width: 0%;"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Skills Row -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+
+            <!-- Found Skills -->
+            <div class="card">
+                <div class="section-title">🛠 Skills Found</div>
+                <div>
+                    {% for skill in skills %}
+                    <span class="skill-tag">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Missing Skills -->
+            {% if missing_skills %}
+            <div class="card">
+                <div class="section-title">📚 Skills to Learn</div>
+                <div>
+                    {% for skill in missing_skills %}
+                    <span class="skill-tag missing-tag">+ {{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- AI Feedback -->
+        {% if ai_feedback %}
+        <div class="ai-feedback-card">
+            <h3>🤖 AI Career Advice</h3>
+            <p>{{ ai_feedback }}</p>
+        </div>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
