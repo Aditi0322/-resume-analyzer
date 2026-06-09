@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Word to PDF - CareerAI{% endblock %}
+
+{% block content %}
+<div class="page-wrapper fade-in">
+    <div class="page-header">
+        <h1>📑 Word to PDF Converter</h1>
+        <p>Convert your Word documents to PDF instantly — free and secure</p>
+    </div>
+
+    <div class="card">
+        <form action="{{ url_for('convert_pdf') }}" method="POST" enctype="multipart/form-data">
+
+            <div class="converter-box">
+
+                <!-- Input -->
+                <div>
+                    <div class="section-title">📝 Word Document</div>
+                    <div class="upload-zone" id="uploadZone" style="padding: 2rem 1rem;">
+                        <label for="fileInput">
+                            <div class="upload-icon">📝</div>
+                            <h3 id="fileLabel" style="font-size: 0.9rem;">Upload .docx file</h3>
+                            <input type="file" id="fileInput" name="docx_file" accept=".docx,.doc" required>
+                            <span class="btn btn-outline btn-sm" style="margin-top: 0.75rem; display: inline-flex;">
+                                Browse
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="converter-arrow">→</div>
+
+                <!-- Output -->
+                <div>
+                    <div class="section-title">📄 PDF Output</div>
+                    <div style="background: var(--gradient-soft); border-radius: 16px; padding: 2rem 1rem; text-align: center; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📄</div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem;">Your PDF will appear here after conversion</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" style="padding: 14px 40px; font-size: 1rem;">
+                    🔄 Convert to PDF
+                </button>
+            </div>
+
+        </form>
+
+        {% if converted %}
+        <div style="text-align: center; margin-top: 2rem; padding: 2rem; background: var(--gradient-soft); border-radius: 16px;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+            <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">Conversion Successful!</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">Your PDF is ready to download</p>
+            <a href="{{ url_for('download_pdf', filename=converted) }}" class="btn btn-primary">
+                ⬇️ Download PDF
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Info Cards -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem;">
+        <div class="card" style="text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔒</div>
+            <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem;">Secure</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Files deleted after conversion</p>
+        </div>
+        <div class="card" style="text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
+            <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem;">Fast</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Convert in seconds</p>
+        </div>
+        <div class="card" style="text-align: center; padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</div>
+            <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem;">Accurate</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Preserves formatting</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
