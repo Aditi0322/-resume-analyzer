@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CareerAI{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+{% if current_user.is_authenticated %}
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-logo">
+        <span>🚀</span> CareerAI
+    </div>
+
+    <ul class="nav-links">
+        <li>
+            <a href="{{ url_for('analyzer') }}" class="{% if request.endpoint == 'analyzer' %}active{% endif %}">
+                📄 <span class="nav-text">Resume Analyzer</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('ats_checker') }}" class="{% if request.endpoint == 'ats_checker' %}active{% endif %}">
+                ✅ <span class="nav-text">ATS Checker</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('word_to_pdf') }}" class="{% if request.endpoint == 'word_to_pdf' %}active{% endif %}">
+                📑 <span class="nav-text">Word to PDF</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
+                📊 <span class="nav-text">Dashboard</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+        <div class="user-avatar">
+            {{ current_user.username[0].upper() }}
+            <div class="user-dropdown">
+                <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+                <a href="{{ url_for('logout') }}">🚪 Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endif %}
+
+<!-- FLASH MESSAGES -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div style="max-width: 900px; margin: 1rem auto; padding: 0 2rem;">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'error' if category == 'error' else 'success' }}">
+            {{ '⚠️' if category == 'error' else '✅' }} {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endwith %}
+
+<!-- PAGE CONTENT -->
+{% block content %}{% endblock %}
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav" id="mobileNav" style="display:none;">
+    <a href="{{ url_for('analyzer') }}" class="{% if request.endpoint == 'analyzer' %}active{% endif %}">
+        <span class="nav-icon">📄</span>
+        Analyzer
+    </a>
+    <a href="{{ url_for('ats_checker') }}" class="{% if request.endpoint == 'ats_checker' %}active{% endif %}">
+        <span class="nav-icon">✅</span>
+        ATS
+    </a>
+    <a href="{{ url_for('word_to_pdf') }}" class="{% if request.endpoint == 'word_to_pdf' %}active{% endif %}">
+        <span class="nav-icon">📑</span>
+        PDF
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
+        <span class="nav-icon">📊</span>
+        Dashboard
+    </a>
+</nav>
+</body>
+</html>
