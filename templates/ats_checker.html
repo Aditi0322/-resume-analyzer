@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}ATS Checker - CareerAI{% endblock %}
+
+{% block content %}
+<div class="page-wrapper fade-in">
+    <div class="page-header">
+        <h1>✅ ATS Checker</h1>
+        <p>Check if your resume passes Applicant Tracking Systems used by recruiters</p>
+    </div>
+
+    <!-- Upload Card -->
+    <div class="card" style="margin-bottom: 1.5rem;">
+        <form action="{{ url_for('ats_check') }}" method="POST" enctype="multipart/form-data">
+            <div class="upload-zone" id="uploadZone">
+                <label for="fileInput">
+                    <div class="upload-icon">✅</div>
+                    <h3 id="fileLabel">Upload your resume for ATS check</h3>
+                    <p>Supports PDF files</p>
+                    <br>
+                    <input type="file" id="fileInput" name="resume" accept=".pdf" required>
+                    <span class="btn btn-outline btn-sm" style="margin-top: 1rem; display: inline-flex;">
+                        Browse File
+                    </span>
+                </label>
+            </div>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" style="padding: 14px 40px; font-size: 1rem;">
+                    ✅ Check ATS Score
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if ats_results %}
+    <div class="fade-in">
+
+        <!-- ATS Score -->
+        <div class="card" style="text-align: center; margin-bottom: 1.5rem;">
+            <p style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem;">ATS Compatibility Score</p>
+            <div class="score-number" style="font-size: 5rem;">{{ ats_results.score }}</div>
+            <div class="score-label" style="font-size: 1rem;">out of 100</div>
+            <div class="progress-bar" style="margin: 1rem auto; max-width: 300px;">
+                <div class="progress-fill" data-width="{{ ats_results.score }}" style="width: 0%;"></div>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                {% if ats_results.score >= 80 %}
+                    🎉 Excellent! Your resume is highly ATS-compatible
+                {% elif ats_results.score >= 60 %}
+                    👍 Good! A few improvements will boost your score
+                {% else %}
+                    ⚠️ Needs work. Follow the suggestions below
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Checklist -->
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="section-title">📋 ATS Checklist</div>
+            <ul class="ats-checklist">
+                {% for check in ats_results.checks %}
+                <li>
+                    <span class="check-icon {{ 'check-pass' if check.passed else 'check-fail' }}">
+                        {{ '✓' if check.passed else '✗' }}
+                    </span>
+                    {{ check.label }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Tips -->
+        <div class="card">
+            <div class="section-title">💡 Improvement Tips</div>
+            {% for tip in ats_results.tips %}
+            <div style="display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                <span style="color: var(--accent); font-size: 1.2rem;">→</span>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">{{ tip }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
