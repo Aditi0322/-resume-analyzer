@@ -7,3 +7,4 @@ python-dotenv
 flask-sqlalchemy
 flask-login
 flask-bcrypt
+docx2pdf
